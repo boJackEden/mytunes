@@ -2,8 +2,22 @@
 var SongQueue = Songs.extend({
 
   initialize: function(){
-    // on enqueue, check for length and playFirst
-    //
+
+    this.on('add', function(){
+      if(this.length === 1){
+        this.playFirst();
+      }
+    }, this)
+    this.on('ended', function(){
+      this.remove(this.at(0));
+      console.log('ended');
+      if(this.length > 0){
+        this.playFirst();
+      }
+    })
+    this.on('dequeue', function(song){
+      this.remove(song);
+    })
   },
   playFirst: function(){
     this.at(0).play();
